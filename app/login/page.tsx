@@ -2,17 +2,36 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { useAuth } from "@/context/AuthContext";
 
 export default function LoginPage() {
+  const { login } = useAuth();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      await login(email, password);
+      // هنا من بعد نقدروا نديرو redirect
+    } catch (err) {
+      setError("Email ou mot de passe incorrect");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="flex justify-center bg-slate-50 px-6 pt-24 pb-16">
       <div className="w-full max-w-md">
-        {/* Card */}
         <div className="rounded-3xl bg-white p-8 shadow-lg border border-slate-200">
-          {/* Title */}
           <div className="text-center">
             <h1 className="text-2xl font-black text-slate-900">Connexion</h1>
             <p className="mt-2 text-sm text-slate-500">
@@ -20,9 +39,7 @@ export default function LoginPage() {
             </p>
           </div>
 
-          {/* Form */}
-          <form className="mt-8 space-y-5">
-            {/* Email */}
+          <form onSubmit={handleSubmit} className="mt-8 space-y-5">
             <div>
               <label className="block text-sm font-semibold text-slate-700 mb-1">
                 Email
@@ -37,7 +54,6 @@ export default function LoginPage() {
               />
             </div>
 
-            {/* Password */}
             <div>
               <label className="block text-sm font-semibold text-slate-700 mb-1">
                 Mot de passe
@@ -52,16 +68,19 @@ export default function LoginPage() {
               />
             </div>
 
-            {/* Button */}
+            {error && (
+              <p className="text-sm text-red-500 text-center">{error}</p>
+            )}
+
             <button
               type="submit"
-              className="w-full rounded-xl bg-indigo-600 px-6 py-3 text-sm font-bold text-white hover:bg-indigo-700 transition"
+              disabled={loading}
+              className="w-full rounded-xl bg-indigo-600 px-6 py-3 text-sm font-bold text-white hover:bg-indigo-700 transition disabled:opacity-60"
             >
-              Se connecter
+              {loading ? "Connexion..." : "Se connecter"}
             </button>
           </form>
 
-          {/* Footer links */}
           <div className="mt-6 text-center text-sm text-slate-600">
             Pas encore de compte ?{" "}
             <Link
