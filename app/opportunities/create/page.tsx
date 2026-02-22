@@ -3,85 +3,180 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-type ProjectType = {
-  id: string;
-  title: string;
-  icon: string;
-};
-
-const types: ProjectType[] = [
-  { id: "partenariat", title: "Partenariat", icon: "🤝" },
-  { id: "immobilier", title: "Immobilier", icon: "🏡" },
-  { id: "financement", title: "Financement", icon: "💰" },
-  { id: "job", title: "Collaboration", icon: "💼" },
+const types = [
+  { id: "collaboration", label: "Collaboration", icon: "💼" },
+  { id: "partenariat", label: "Partenariat", icon: "🤝" },
+  { id: "financement", label: "Financement", icon: "💰" },
+  { id: "immobilier", label: "Immobilier", icon: "🏡" },
 ];
 
 export default function CreateOpportunityPage() {
   const [selected, setSelected] = useState<string | null>(null);
   const router = useRouter();
 
-  return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white flex flex-col items-center justify-start px-6 pt-24 pb-16">
+  const size = 380;
+  const radius = 160;
+  const gap = 6;
+  const center = size / 2;
 
-      {/* HEADER */}
-      <div className="text-center mb-8">
-        <h1 className="text-2xl md:text-3xl font-bold text-slate-900">
+  const polarToCartesian = (
+    cx: number,
+    cy: number,
+    r: number,
+    angle: number
+  ) => {
+    const rad = ((angle - 90) * Math.PI) / 180.0;
+    return {
+      x: cx + r * Math.cos(rad),
+      y: cy + r * Math.sin(rad),
+    };
+  };
+
+  const createPath = (startAngle: number, endAngle: number) => {
+    const start = polarToCartesian(center, center, radius, endAngle - gap);
+    const end = polarToCartesian(center, center, radius, startAngle + gap);
+    const largeArcFlag = endAngle - startAngle <= 180 ? "0" : "1";
+
+    return `
+      M ${center} ${center}
+      L ${start.x} ${start.y}
+      A ${radius} ${radius} 0 ${largeArcFlag} 0 ${end.x} ${end.y}
+      Z
+    `;
+  };
+
+  return (
+<div className="min-h-screen bg-gradient-to-b from-slate-50 to-white flex flex-col items-center pt-6 px-6">
+      <div className="text-center">
+          <h1 className="text-2xl font-bold text-slate-900">
           Choisissez le type de projet
         </h1>
-        <p className="mt-2 text-sm text-slate-500">
-          Sélectionnez la catégorie adaptée à votre publication.
+        <p className="text-sm text-slate-500 mt-2">
+          Sélectionnez une catégorie pour commencer
         </p>
       </div>
 
-      {/* CIRCLE WRAPPER */}
-      <div className="relative w-[340px] h-[340px] flex items-center justify-center">
+      <div className="relative">
 
-        {/* Smaller Center circle */}
-        <div className="absolute w-16 h-16 rounded-full bg-white shadow-md flex items-center justify-center border border-slate-200">
-          <img
-            src="/logo.png"
-            alt="Digital Bridge"
-            className="w-7 h-7 object-contain"
-          />
-        </div>
+        {/* WHEEL */}
+        <svg
+          width={size}
+          height={size}
+          className={`drop-shadow-xl transition-all duration-500 ${
+            selected ? "scale-90 opacity-30" : "scale-100 opacity-100"
+          }`}
+        >
+          {types.map((type, index) => {
+            const startAngle = index * 90;
+            const endAngle = startAngle + 90;
 
-        {/* Circular items */}
+            return (
+              <g
+                key={type.id}
+                onClick={() => setSelected(type.id)}
+                className="cursor-pointer"
+              >
+                <path
+                  d={createPath(startAngle, endAngle)}
+                  fill="white"
+                  stroke="#e2e8f0"
+                  strokeWidth={2}
+                  className="transition-all duration-300 hover:fill-slate-100"
+                />
+              </g>
+            );
+          })}
+        </svg>
+
+        {/* LABELS */}
         {types.map((type, index) => {
-          const angle = (index / types.length) * 2 * Math.PI;
-          const radius = 130;
-          const x = radius * Math.cos(angle);
-          const y = radius * Math.sin(angle);
+          const angle = index * 90 + 45;
+          const pos = polarToCartesian(center, center, radius - 70, angle);
 
           return (
-            <button
+            <div
               key={type.id}
-              onClick={() => setSelected(type.id)}
-              style={{
-                transform: `translate(${x}px, ${y}px)`,
-              }}
-              className={`absolute w-28 h-28 rounded-full flex flex-col items-center justify-center text-center transition-all duration-300 shadow-md
+              className={`absolute flex flex-col items-center justify-center 
+                text-sm font-semibold pointer-events-none
+                transition-all duration-500
                 ${
-                  selected === type.id
-                    ? "scale-110 ring-4 ring-indigo-400 bg-white"
-                    : "bg-white hover:scale-105"
+                  selected
+                    ? "opacity-0 scale-75"
+                    : "opacity-100 scale-100"
                 }
               `}
+              style={{
+                left: pos.x,
+                top: pos.y,
+                transform: "translate(-50%, -50%)",
+              }}
             >
-              <span className="text-3xl">{type.icon}</span>
-              <span className="text-xs mt-2 font-medium text-slate-700">
-                {type.title}
+              <span className="text-2xl mb-1">
+                {type.icon}
               </span>
-            </button>
+              {type.label}
+            </div>
           );
         })}
+
+        {/* SELECTED BIG CIRCLE */}
+        {selected && (
+          <div className="absolute inset-0 flex items-center justify-center animate-fadeIn">
+
+            <div className="w-[280px] h-[280px] rounded-full bg-emerald-50 border-4 border-emerald-400 shadow-2xl flex flex-col items-center justify-center transition-all duration-500 scale-100 text-center px-6">
+
+  <div className="text-5xl mb-3">
+    {types.find((t) => t.id === selected)?.icon}
+  </div>
+
+  <div className="text-lg font-bold text-emerald-700">
+    {types.find((t) => t.id === selected)?.label}
+  </div>
+
+  <p className="text-sm text-slate-500 mt-2">
+    Type sélectionné
+  </p>
+
+  <button
+  onClick={() => setSelected(null)}
+  className="mt-5 w-10 h-10 flex items-center justify-center 
+             rounded-full border border-slate-300 
+             text-xl font-bold text-slate-600 
+             hover:bg-red-50 hover:text-red-600 hover:border-red-300
+             transition-all duration-300 shadow-sm cursor-pointer"
+>
+  ✕
+</button>
+
+</div>
+          </div>
+        )}
+
+        {/* CENTER LOGO (only when no selection) */}
+        {!selected && (
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <div className="w-20 h-20 rounded-full bg-white shadow-lg border border-slate-200 flex items-center justify-center">
+              <img
+                src="/logo.png"
+                alt="logo"
+                className="w-10 h-10 object-contain"
+              />
+            </div>
+          </div>
+        )}
       </div>
 
       {/* CONTINUE BUTTON */}
-      <div className="mt-12">
+      <div>
         <button
           disabled={!selected}
           onClick={() => router.push(`/create/${selected}`)}
-          className="px-8 py-3 rounded-2xl bg-indigo-600 text-white font-semibold hover:bg-indigo-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+          className={`px-8 py-3 rounded-2xl font-semibold transition
+            ${
+              selected
+                ? "bg-indigo-600 text-white hover:bg-indigo-700"
+                : "bg-indigo-300 text-white cursor-not-allowed"
+            }`}
         >
           Continuer →
         </button>
