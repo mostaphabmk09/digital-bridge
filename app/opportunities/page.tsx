@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
+
 
 type Opportunity = {
   id: number;
@@ -239,9 +241,9 @@ export default function OpportunitiesPage() {
                   </span>
                 </div>
 
-                <button className="rounded-xl bg-slate-900 text-white px-4 py-2 text-sm font-semibold hover:bg-indigo-600 transition">
-                  Voir détail
-                </button>
+                <Link href={`/opportunities/${item.id}`} className="rounded-xl bg-slate-900 text-white px-4 py-2 text-sm font-semibold hover:bg-indigo-600 transition">
+  Voir détail
+</Link>
               </div>
             </div>
           ))}
