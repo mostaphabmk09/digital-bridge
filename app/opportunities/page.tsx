@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { useAuth } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
 
 type Opportunity = {
   id: number;
@@ -42,7 +44,7 @@ const mockData: Opportunity[] = [
     id: 3,
     title: "Investisseur pour projet immobilier Airbnb",
     description:
-      "Opportunité d’achat d’un appartement à Marrakech pour exploitation Airbnb.",
+      "Opportunité d’achat d’un appartement à Marrakech.",
     type: "Financement",
     domaine: "Immobilier",
     budget: "200k MAD",
@@ -52,29 +54,6 @@ const mockData: Opportunity[] = [
   },
   {
     id: 4,
-    title: "Recherche associé pour agence marketing",
-    description:
-      "Agence en croissance cherche associé stratégique pour expansion nationale.",
-    type: "Partenariat",
-    domaine: "Marketing",
-    budget: "30k MAD",
-    location: "Rabat",
-    author: "Sara",
-    date: "Il y a 3 jours",
-  },
-  {
-    id: 5,
-    title: "Besoin conseil juridique startup",
-    description:
-      "Startup fintech cherche expert juridique pour structuration société.",
-    type: "Conseils",
-    domaine: "Legal",
-    location: "Remote",
-    author: "Karim",
-    date: "Il y a 4 jours",
-  },
-  {
-    id: 6,
     title: "Co-fondateur pour plateforme e-commerce",
     description:
       "Recherche partenaire technique pour lancer marketplace niche.",
@@ -86,33 +65,10 @@ const mockData: Opportunity[] = [
     date: "Il y a 1 jour",
   },
   {
-    id: 7,
-    title: "Community manager pour projet crypto",
-    description:
-      "Besoin d’un CM pour gérer communauté Web3 et réseaux sociaux.",
-    type: "Job",
-    domaine: "Web3",
-    location: "Remote",
-    author: "Nadia",
-    date: "Il y a 6 jours",
-  },
-  {
-    id: 8,
-    title: "Financement projet agricole innovant",
-    description:
-      "Projet d’agriculture intelligente cherche investisseurs.",
-    type: "Financement",
-    domaine: "Agriculture",
-    budget: "150k MAD",
-    location: "Fès",
-    author: "Omar",
-    date: "Il y a 1 semaine",
-  },
-  {
-    id: 9,
+    id: 5,
     title: "Consultant UX pour refonte app mobile",
     description:
-      "Startup en phase croissance cherche expert UX/UI freelance.",
+      "Startup en croissance cherche expert UX/UI freelance.",
     type: "Conseils",
     domaine: "Design",
     location: "Casablanca",
@@ -120,16 +76,15 @@ const mockData: Opportunity[] = [
     date: "Il y a 3 jours",
   },
   {
-    id: 10,
-    title: "Partenaire pour salle de sport premium",
+    id: 6,
+    title: "Community manager pour projet crypto",
     description:
-      "Projet fitness haut de gamme cherche associé investisseur.",
-    type: "Partenariat",
-    domaine: "Fitness",
-    budget: "120k MAD",
-    location: "Agadir",
-    author: "Hamza",
-    date: "Il y a 2 semaines",
+      "Besoin d’un CM pour gérer communauté Web3.",
+    type: "Job",
+    domaine: "Web3",
+    location: "Remote",
+    author: "Nadia",
+    date: "Il y a 6 jours",
   },
 ];
 
@@ -144,6 +99,9 @@ const filters = [
 export default function OpportunitiesPage() {
   const [search, setSearch] = useState("");
   const [activeType, setActiveType] = useState("Tous");
+  const [favorites, setFavorites] = useState<number[]>([]);
+  const { user } = useAuth();
+  const router = useRouter();
 
   const filtered = mockData.filter((item) => {
     const matchesSearch =
@@ -160,7 +118,7 @@ export default function OpportunitiesPage() {
     <div className="bg-gradient-to-b from-slate-50 to-white min-h-screen">
       <div className="max-w-7xl mx-auto px-6 py-14">
 
-        {/* HEADER */}
+        {/* Header */}
         <div className="mb-12">
           <h1 className="text-4xl font-black text-slate-900">
             Opportunités
@@ -170,7 +128,7 @@ export default function OpportunitiesPage() {
           </p>
         </div>
 
-        {/* SEARCH */}
+        {/* Search */}
         <div className="mb-8 relative">
           <input
             type="text"
@@ -184,7 +142,7 @@ export default function OpportunitiesPage() {
           </span>
         </div>
 
-        {/* FILTER MENU */}
+        {/* Filters */}
         <div className="flex flex-wrap gap-3 mb-12">
           {filters.map((filter) => (
             <button
@@ -202,7 +160,7 @@ export default function OpportunitiesPage() {
           ))}
         </div>
 
-        {/* CARDS */}
+        {/* Cards */}
         <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-8">
           {filtered.map((item) => (
             <div
@@ -210,15 +168,39 @@ export default function OpportunitiesPage() {
               className="group bg-white rounded-3xl border border-slate-200 p-7 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition duration-300 flex flex-col justify-between"
             >
               <div>
-                <div className="flex items-center justify-between mb-4">
-                  <span className="px-3 py-1 text-xs font-bold rounded-full bg-indigo-100 text-indigo-700">
-                    {item.type}
-                  </span>
 
-                  <span className="text-xs text-slate-400">
-                    {item.date}
-                  </span>
-                </div>
+                {/* Top */}
+                <div className="flex items-center justify-between mb-4">
+
+  <div className="flex items-center gap-3">
+    <span className="px-3 py-1 text-xs font-bold rounded-full bg-indigo-100 text-indigo-700">
+      {item.type}
+    </span>
+
+    <span className="text-xs text-slate-400">
+      {item.date}
+    </span>
+  </div>
+
+  {/* Favorite */}
+  <button
+    onClick={() => {
+      if (!user) {
+        router.push("/login");
+        return;
+      }
+
+      setFavorites((prev) =>
+        prev.includes(item.id)
+          ? prev.filter((id) => id !== item.id)
+          : [...prev, item.id]
+      );
+    }}
+    className="text-base opacity-70 hover:opacity-100 transition transform hover:scale-110"
+  >
+    {favorites.includes(item.id) ? "❤️" : "🤍"}
+  </button>
+</div>
 
                 <h2 className="text-xl font-bold text-slate-900 group-hover:text-indigo-600 transition">
                   {item.title}
@@ -228,7 +210,7 @@ export default function OpportunitiesPage() {
                   {item.description}
                 </p>
 
-                {/* META INLINE */}
+                {/* Meta inline */}
                 <div className="mt-5 flex flex-wrap gap-2 text-xs">
                   <span className="flex items-center gap-1 bg-slate-100 px-3 py-1 rounded-full text-slate-600">
                     📍 {item.location}
@@ -246,7 +228,7 @@ export default function OpportunitiesPage() {
                 </div>
               </div>
 
-              {/* FOOTER */}
+              {/* Bottom */}
               <div className="mt-6 flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className="h-10 w-10 rounded-full bg-indigo-600 text-white flex items-center justify-center text-sm font-bold">
