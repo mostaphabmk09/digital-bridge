@@ -8,6 +8,7 @@ const types = [
   { id: "partenariat", label: "Partenariat", icon: "🤝" },
   { id: "financement", label: "Financement", icon: "💰" },
   { id: "immobilier", label: "Immobilier", icon: "🏡" },
+  { id: "autres", label: "Autres", icon: "✨" },
 ];
 
 export default function CreateOpportunityPage() {
@@ -67,8 +68,9 @@ export default function CreateOpportunityPage() {
           }`}
         >
           {types.map((type, index) => {
-            const startAngle = index * 90;
-            const endAngle = startAngle + 90;
+            const segmentAngle = 360 / types.length;
+            const startAngle = index * segmentAngle;
+            const endAngle = startAngle + segmentAngle;
 
             return (
               <g
@@ -90,7 +92,8 @@ export default function CreateOpportunityPage() {
 
         {/* LABELS */}
         {types.map((type, index) => {
-          const angle = index * 90 + 45;
+          const segmentAngle = 360 / types.length;
+          const angle = index * segmentAngle + segmentAngle / 2;
           const pos = polarToCartesian(center, center, radius - 70, angle);
 
           return (
