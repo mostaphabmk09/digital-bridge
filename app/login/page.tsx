@@ -3,9 +3,11 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
   const { login } = useAuth();
+  const router = useRouter();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -13,20 +15,23 @@ export default function LoginPage() {
   const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    setLoading(true);
-    setError(null);
+  setLoading(true);
+  setError(null);
 
-    try {
-      await login(email, password);
-      // هنا من بعد نقدروا نديرو redirect
-    } catch (err) {
-      setError("Email ou mot de passe incorrect");
-    } finally {
-      setLoading(false);
-    }
-  };
+  try {
+    await login(email, password);
+
+    // ✅ Redirect l home page
+    router.push("/");
+
+  } catch (err) {
+    setError("Email ou mot de passe incorrect");
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="flex justify-center bg-slate-50 px-6 pt-24 pb-16">

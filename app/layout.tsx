@@ -1,8 +1,9 @@
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { AuthProvider } from "@/context/AuthContext";
+import MobileBottomNav from "@/components/layout/MobileBottomNav";
 import "./globals.css";
-
+import MobilePublishButton from "@/components/layout/MobilePublishButton";
 export default function RootLayout({
   children,
 }: {
@@ -10,11 +11,22 @@ export default function RootLayout({
 }) {
   return (
     <html lang="fr">
-      <body className="min-h-screen flex flex-col">
+      <body className="min-h-screen bg-white">
         <AuthProvider>
-          <Navbar />
-          <main className="flex-1">{children}</main>
-          <Footer />
+          {/* Main Page Wrapper */}
+<div className="flex min-h-[100dvh] flex-col">            <Navbar />
+
+            {/* Content */}
+            <main className="flex-1 pb-24 md:pb-0">
+              {children}
+            </main>
+
+            <Footer />
+
+            {/* Mobile Bottom Navigation */}
+            <MobileBottomNav />
+            <MobilePublishButton />
+          </div>
         </AuthProvider>
       </body>
     </html>

@@ -2,8 +2,7 @@ import Link from "next/link";
 
 export default function HeroSection() {
   return (
-    <section className="relative overflow-hidden bg-gradient-to-br from-indigo-700 via-indigo-800 to-indigo-900 text-white">
-      {/* Grid background */}
+<section className="relative bg-gradient-to-br from-indigo-700 via-indigo-800 to-indigo-900 text-white">      {/* Grid background */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.18)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.18)_1px,transparent_1px)] bg-[size:150px_150px]" />
 
       {/* Soft overlay */}
