@@ -8,7 +8,7 @@ export default function MobileBottomNav() {
 
   const links = [
     { label: "Accueil", href: "/", icon: "🏠" },
-    { label: "Opportunités", href: "/opportunites", icon: "💼" },
+    { label: "Opportunités", href: "/opportunities", icon: "💼" },
     { label: "Immobilier", href: "/immobilier", icon: "🏢" },
     { label: "Expériences", href: "/experiences", icon: "⭐" },
   ];

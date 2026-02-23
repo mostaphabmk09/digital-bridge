@@ -5,10 +5,10 @@ import { useRouter } from "next/navigation";
 
 const types = [
   { id: "collaboration", label: "Collaboration", icon: "💼" },
-  { id: "partenariat", label: "Partenariat", icon: "🤝" },
+  // { id: "partenariat", label: "Partenariat", icon: "🤝" },
   { id: "financement", label: "Financement", icon: "💰" },
   { id: "immobilier", label: "Immobilier", icon: "🏡" },
-  { id: "autres", label: "Autres", icon: "✨" },
+  // { id: "autres", label: "Autres", icon: "✨" },
 ];
 
 export default function CreateOpportunityPage() {
