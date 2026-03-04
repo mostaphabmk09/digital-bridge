@@ -6,7 +6,8 @@ body {
 }
 
 body {
-  @apply bg-slate-50 text-slate-900;
+  background-color: #f2f4ff;
+  color: #0f172a;
 }
 
 @keyframes dropdown {

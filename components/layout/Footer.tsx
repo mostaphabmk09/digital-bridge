@@ -1,105 +1,105 @@
+﻿import Link from "next/link";
+
 export default function Footer() {
   return (
-    <footer className="border-t border-slate-200 bg-white">
-      <div className="mx-auto max-w-6xl px-6 py-14">
-        <div className="grid gap-10 md:grid-cols-4">
-          {/* BRAND */}
-          <div>
-            <h3 className="text-lg font-black text-slate-900">
-              Digital Bridge
-            </h3>
-
-            <p className="mt-3 text-sm text-slate-600 leading-relaxed">
-              Plateforme de collaboration pour trouver des partenaires,
-              investisseurs et opportunités réelles.
-            </p>
-          </div>
-
-          {/* NAVIGATION */}
-          <div>
-            <h4 className="text-sm font-semibold text-slate-900">Navigation</h4>
-
-            <ul className="mt-4 space-y-2 text-sm text-slate-600">
-              <li>
-                <a href="#" className="hover:text-indigo-600 transition">
-                  Accueil
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-indigo-600 transition">
-                  Opportunités
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-indigo-600 transition">
-                  Immobilier
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-indigo-600 transition">
-                  Expériences
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          {/* RESSOURCES */}
-          <div>
-            <h4 className="text-sm font-semibold text-slate-900">Ressources</h4>
-
-            <ul className="mt-4 space-y-2 text-sm text-slate-600">
-              <li>
-                <a href="#" className="hover:text-indigo-600 transition">
-                  Conditions d'utilisation
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-indigo-600 transition">
-                  Politique de confidentialité
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-indigo-600 transition">
-                  Support
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          {/* CONTACT */}
-          <div>
-            <h4 className="text-sm font-semibold text-slate-900">Contact</h4>
-
-            <p className="mt-4 text-sm text-slate-600">
-              contact@digitalbridge.ma
-            </p>
-
-            <div className="mt-4 flex gap-3">
-              {["🌐", "📱", "✉️"].map((icon, i) => (
-                <div
-                  key={i}
-                  className="flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 transition cursor-pointer"
+    <footer
+      style={{
+        borderTop: "1px solid rgba(0,0,0,0.07)",
+        padding: "48px 0 32px",
+        backgroundColor: "#f2f4ff",
+      }}
+    >
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="mb-11 grid grid-cols-2 gap-8 md:grid-cols-4">
+          <div className="col-span-2 md:col-span-1">
+            <div className="mb-3 flex items-center gap-2.5">
+              <div
+                style={{
+                  width: "30px",
+                  height: "30px",
+                  borderRadius: "8px",
+                  background: "linear-gradient(135deg, #6366F1, #8B5CF6)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  color: "white",
+                  fontSize: "12px",
+                  fontWeight: 700,
+                }}
+              >
+                DB
+              </div>
+              <span className="text-base font-bold text-slate-900">
+                Digital{" "}
+                <span
+                  style={{
+                    background: "linear-gradient(90deg, #818CF8, #C084FC)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                  }}
                 >
-                  {icon}
-                </div>
-              ))}
+                  Bridge
+                </span>
+              </span>
             </div>
+            <p className="m-0 text-sm leading-relaxed text-slate-500">
+              La plateforme qui connecte entrepreneurs, investisseurs et acteurs
+              immobiliers.
+            </p>
           </div>
+
+          {[
+            {
+              title: "Plateforme",
+              links: ["Opportunites", "Collaboration", "Financement", "Immobilier"],
+            },
+            {
+              title: "Compte",
+              links: ["Se connecter", "S inscrire", "Dashboard", "Profil"],
+            },
+            {
+              title: "Entreprise",
+              links: ["A propos", "Blog", "Contact", "CGU"],
+            },
+          ].map((col) => (
+            <div key={col.title}>
+              <p className="mb-3 text-xs font-bold tracking-wide text-slate-500 uppercase">
+                {col.title}
+              </p>
+              <div className="flex flex-col gap-2">
+                {col.links.map((label) => (
+                  <Link
+                    key={label}
+                    href="#"
+                    className="text-sm text-slate-500 transition hover:text-slate-900"
+                  >
+                    {label}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          ))}
         </div>
 
-        {/* Bottom bar */}
-        <div className="mt-12 border-t border-slate-200 pt-6 text-sm text-slate-500 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-          <p>
-            © {new Date().getFullYear()} Digital Bridge — Tous droits réservés.
+        <div className="flex flex-col items-center justify-between gap-3 border-t border-black/10 pt-6 sm:flex-row">
+          <p className="m-0 text-xs text-slate-400">
+            Copyright {new Date().getFullYear()} Digital Bridge. Tous droits
+            reserves.
           </p>
-
-          <div className="flex gap-6">
-            <a href="#" className="hover:text-indigo-600 transition">
-              Conditions
-            </a>
-            <a href="#" className="hover:text-indigo-600 transition">
-              Confidentialité
-            </a>
+          <div className="flex items-center gap-4">
+            {[
+              { label: "Confidentialite", href: "#" },
+              { label: "Conditions", href: "#" },
+              { label: "Cookies", href: "#" },
+            ].map((item) => (
+              <Link
+                key={item.label}
+                href={item.href}
+                className="text-xs text-slate-400 transition hover:text-slate-600"
+              >
+                {item.label}
+              </Link>
+            ))}
           </div>
         </div>
       </div>

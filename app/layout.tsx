@@ -12,7 +12,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="fr">
-      <body className="min-h-screen bg-white">
+      <body className="min-h-screen bg-[#f2f4ff]">
         <AuthProvider>
           {/* Main Page Wrapper */}
           <div className="flex min-h-[100dvh] flex-col">            

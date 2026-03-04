@@ -12,6 +12,7 @@ type User = {
   userId: string;
   email: string;
   role: string;
+  profileType?: string | null;
 };
 
 type AuthContextType = {
